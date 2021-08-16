@@ -1,2 +1,5 @@
 # saveGamesApp
-Web app for sharing game save files, may contain the usual 100% completion ones, and also plan to focus on odd ones, such as a save file up to a specific part of the game, may it be a mission, a level or even a completion percentage.
+### Diclaimer: *There aren't any plans to actually deploy this, this is a personal project for learning purposes only*
+- Built on Node.js with Express.js
+- Used MongoDB free tier for testing purposes
+- Deployed on Heroku for testing purposes only
