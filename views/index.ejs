@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        .sideNav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            background-color: lightgrey;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 60px;
+            transition: 0.5s;
+        }
+        .sideNav a:hover {
+            color: #ffffff;
+            background-color: #999999;
+        }
+        .sideNav .closebtn {
+            position: absolute;
+            top: 2%;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+        .cat {
+            position: absolute;
+            top: 0;
+            margin-left: 30%;
+            font-size: 130%;
+        }
+        #main {
+            transition: margin-left .5s;
+            margin-left: 10px;
+            margin-right: 10px; 
+        }
+        .pad {
+            margin-left: 5%;
+        }
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="sideNav" class="sideNav">
+        <span class="closebtn" onclick="closeNav()">&times;</span>
+        <span class="cat">Categorias</span>
+        <div class="btn-group-vertical pad" role="group">
+            <button class="btn btn-primary">Classificar por</button>
+        </div>
+    </div>
+    <div id="main">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <!--<a class="navbar-brand">SaveGames</a>-->
+                <button class="navbar-toggler navbar-brand" type="button" onclick="openNav()" id="openbtn"><span class="navbar-toggler-icon"></span></button>
+                <span class="navbar-brand"><a class="btn btn-outline-secondary" href="/" role="button">SaveGames</a></span>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-dark dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <% if(user.name === null) { %>
+                            <%= 'Area do usuario' %>
+                        <% } else { %>
+                            <%= user.name %>
+                            <% } %>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" id="loginbtn" href="/login">
+                            <% if(user.name === null) { %>
+                                <%= 'Login' %>
+                            <% } else { %>
+                                <%= 'Ja esta logado' %>
+                                <% } %>
+                        </a></li>
+                        <li><a class="dropdown-item logged" id="posta" href="/postar">Enviar save</a></li>
+                        <li><a class="dropdown-item logged" id="savesP" href="/user/<%= user.username %>">
+                            <% if(hasSaves) { %>
+                                <%= 'Meus saves' %>
+                            <% } else { %>
+                                <%= 'hideme' %>
+                            <% } %>
+                        </a></li>
+                        <li><form action="/logout?_method=DELETE" method="POST"><button class="dropdown-item" id="logoutbtn" type="submit">Sair</button></form></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <!--daqui-->
+                <% for(i=0; i < data.length; i++) { %>
+                <div class="col">
+                    <div class="card card-r" style="max-width: 24rem; margin-right: 5rem;">
+                        <img class="card-img-top" src=" <%= data[i].imgSrc %> " alt="GTA 5 thumbnail"><span class="label label-default">Postado por: <a href="/user/<%= data[i].username %>"> <%= data[i].username %> </a></span></img>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%= data[i].title %>
+                            </h5>
+                            <p class="card-text">
+                                <%= data[i].desc %>
+                            </p>
+                            <a href=" <%= data[i].url %> " class="btn btn-primary">Download</a>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                <!--ate aqui-->
+            </div>
+        </div>
+        <nav aria-label="indexPages" class="position-static bottom-0 start-75">
+            <ul class="pagination" id="pages">
+            </ul>
+          </nav>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+    <script>
+        var openNav, closeNav, length, urlParams, pages;
+        var pagesArr = [];
+        $(document).ready(() => {
+            urlParams = new URLSearchParams(window.location.search);
+            length = [<%= length %>] ;
+            if($("#navbarDropdown").width() < 160) {
+                $("#navbarDropdown").css({'width': '160px'});
+            }
+            if($("#loginbtn").html().indexOf("esta") >= 0) {
+                $("#loginbtn").addClass('disabled')
+            } else {
+                $("#logoutbtn").hide();
+                $(".logged").addClass('disabled');
+            }
+            if($('#savesP').html().indexOf('hideme') >= 0) {
+                $('#savesP').hide();
+            }
+            function respond() {
+            var wWidth = $(window).width();
+            var wHeight = $(window).height();
+            if (wWidth < 600) {
+                $("#sideNav").width(0);
+                $("#main").css({"margin-left":"0"});
+                $(".closebtn").css({"display": "" });
+                $("#openbtn").css("display", "");
+                openNav = function() {
+                document.getElementById("sideNav").style.width = "250px";
+                $("#sideNav").css({'width' : (wWidth / 2)})
+                //document.getElementById("main").style.marginLeft = "250px";
+                }
+                closeNav = function() {
+                    document.getElementById("sideNav").style.width = "0";
+                    //document.getElementById("main").style.marginLeft = "0";
+                }
+            } else {
+                $("#sideNav").width(250);
+                $(".closebtn").css({"display": "none" });
+                $("#openbtn").css("display", "none");
+                $("#main").css("margin-left", "260px");
+            }
+        }
+    if(urlParams.get('limit') === null) {
+            pages = Math.ceil(length.length / 15);
+    } else {
+	    pages = Math.ceil(length.length / parseInt(urlParams.get('limit')));
+    }
+
+        for(i=1;i < pages + 1; i++) {
+            pagesArr.push(i);
+        }
+        if(urlParams.get('limit') === null) {
+            for(i in pagesArr) {
+                console.log(typeof i)
+                if((urlParams.get('page') === null || urlParams.get('page') === '1') && i === '0') {
+                    $('#pages').append('<li class="page-item disabled" id="prev"><a class="page-link" href="#">Anterior</a></li>')
+                } else {
+                    if(i === '0') {
+                        $('#pages').append('<li class="page-item" id="prev"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) - 1) +'">Anterior</a></li>')
+                    }
+                }
+                $('#pages').append('<li class="page-item" id="pageBtn'+pagesArr[i]+'"><a class="page-link" href="/?page='+pagesArr[i]+'">'+pagesArr[i]+'</a>');
+            }
+        } else {
+            for(i in pagesArr) {
+                if((urlParams.get('page') === null || urlParams.get('page') === '1') && i === '0') {
+                    $('#pages').append('<li class="page-item disabled" id="prev"><a class="page-link" href="#">Anterior</a></li>')
+                } else {
+                    if(i === '0') {
+                        $('#pages').append('<li class="page-item" id="prev"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) - 1) +'&limit='+parseInt(urlParams.get('limit'))+'">Anterior</a></li>');
+                    }
+                }
+                $('#pages').append('<li class="page-item" id="pageBtn'+pagesArr[i]+'"><a class="page-link" href="/?page='+pagesArr[i]+'&limit='+parseInt(urlParams.get('limit'))+'">'+pagesArr[i]+'</a>');
+            } 
+        }
+        $('.page-link').click(() => {
+            console.log($('.page-link').children())
+        })
+        console.log($('.page-link').children())
+        if(urlParams.get('limit') === null) {
+            if(urlParams.get('page') != pagesArr[pagesArr.length - 1]) {
+                $('#pages').append('<li class="page-item"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) + 1) +'">Proxima</a></li>');
+            } else {
+                $('#pages').append('<li class="page-item disabled"><a class="page-link" href="#">Proxima</a></li>');
+            }
+        } else {
+            if(urlParams.get('page') != pagesArr[pagesArr.length - 1]) {
+                $('#pages').append('<li class="page-item"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) + 1) +'&limit='+ urlParams.get('limit') +'">Proxima</a></li>');
+            } else {
+                $('#pages').append('<li class="page-item disabled"><a class="page-link" href="#">Proxima</a></li>');
+            }
+        }
+        $('#pages').append('<li><div class="input-group flex-nowrap"><span class="input-group-text" id="addon-wrapping">Itens por pagina</span><input type="text" class="form-control" placeholder="Itens por pagina" aria-describedby="addon-wrapping" value="15" id="valLimit"><a class="btn btn-secondary" id="limit">Mudar itens por pagina</a></div></li>')
+
+        $('#limit').click(() => {
+            if(urlParams.get('page') === null) {
+                $('#limit').attr('href', '/?limit=' + $('#valLimit').val())
+            } else {
+                $('#limit').attr('href', '/?page=' + urlParams.get('page') + '&limit=' + $('#valLimit').val());
+            }
+
+        })
+        if(urlParams.get('limit') !== null) {
+            $('#valLimit').val(urlParams.get('limit'));
+        }
+        if(urlParams.get('page') === null || urlParams.get('page') === '1') {
+            $('#pageBtn1').addClass('active');
+            $('#prev').addClass('disabled');
+        }
+        else {
+            $('#pageBtn' + urlParams.get('page')).addClass('active');
+            $('#prev').removeClass('disabled');
+        }
+        
+        respond();
+        $(window).resize(respond);
+        });
+    </script>
+</body>
+</html>
