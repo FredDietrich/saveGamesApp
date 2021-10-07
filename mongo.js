@@ -1,5 +1,5 @@
 const MongoClient = require('mongodb');
-var url = "mongo";
+var url = "mongodb+srv://dietrich-admin:JGNhFdgEnJdJA6fm@savescluster.p8ha1.mongodb.net/savesCluster?retryWrites=true&w=majority";
 
 
 exports.sendUser = (obj) => {
