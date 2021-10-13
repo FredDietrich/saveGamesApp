@@ -5,8 +5,6 @@ if(process.env.NODE_ENV !== 'production') {
 /* declaring dependencies variables */
 const express = require('express');
 const app = express();
-const path = require('path');
-const MongoClient = require('mongodb');
 const bcrypt = require('bcrypt');
 const fileUpload = require('express-fileupload');
 const initializePassport = require('./passport-config');
@@ -15,10 +13,8 @@ const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const scrapeThis = require('./scraper');
-const axios = require('axios');
 const mongo = require('./mongo')
-const listOfGames = require('./games');
-
+const enviaEmail = require('./sendMail').enviaEmail;
 
 //express configuration
 app.use(express.json());
@@ -96,6 +92,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
             id: Date.now().toString(),
             name: req.body.name,
             username: req.body.username,
+            email: req.body.email,
             password: hashedPassword
         };
         mongo.userExists(attr.username, (go) => {
@@ -103,6 +100,16 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
                 res.redirect('/register?error=userexists');
             } else {
                 mongo.sendUser(attr);
+                enviaEmail(attr.email, attr.username, `
+                <html>
+                <body>
+                <h1>Bem vindo ao meu site!</h1>
+                <h2>Este email não tem nenhuma utilidade, então pode ignorar.</h2>
+                <h2>Futuramente haverá confirmação de cadastro por e-mail!</h2>
+                <footer>saveGamesApp - Frederico Dietrich - 2021</footer>
+                </body>
+                </html>
+                `, 'Criação de Usuário')
                 res.redirect('/login');
             }
         });
