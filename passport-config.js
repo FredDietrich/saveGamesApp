@@ -25,6 +25,7 @@ function initialize(passport) {
         }
         try {
             if(await bcrypt.compare(password, user.password)) {
+                console.log(user)
                 return done(null, user)
             } else {
                 return done(null, false, {message: 'Verifique a senha ou username'})

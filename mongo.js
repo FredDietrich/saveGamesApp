@@ -84,6 +84,7 @@ exports.getSaves = (range, req, res) => {
                                 for(i=1;i < length + 1; i++) {
                                     lengthArr.push(i);
                                 }
+                                console.log('1')
                                 res.render('index.ejs', {user: req.user, data : result, hasSaves: true, length:lengthArr});
                             })
                         } else {
@@ -92,6 +93,7 @@ exports.getSaves = (range, req, res) => {
                                 for(i=1;i < length + 1; i++) {
                                     lengthArr.push(i);
                                 }
+                                console.log(req.user.name)
                                 res.render('index.ejs', {user: req.user, data : result, hasSaves: false, length:lengthArr});
                             })
                         }
