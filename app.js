@@ -119,20 +119,29 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
     }
 });
 app.get('/postar', checkAuthenticated, (req, res) => {
-    if(req.query.error === 'gamenotfound') {
-        if(typeof req.user !== 'undefined') {
-            res.render('postar.ejs', {usersname : req.user.name, message: 'Thumbnail do jogo nao encontrada, confira o nome do jogo inserido e tente novamente.'});
+    function resto(game) {
+        if(req.query.error === 'gamenotfound') {
+            if(typeof req.user !== 'undefined') {
+                res.render('postar.ejs', {usersname : req.user.name, message: 'Thumbnail do jogo nao encontrada, confira o nome do jogo inserido e tente novamente.', game:game});
+            }
+            else {
+                res.render('postar.ejs', {usersname : null, message: 'Thumbnail do jogo nao encontrada, confira o nome do jogo inserido e tente novamente.', game:game});
+            }   
+        } else {
+            if(typeof req.user !== 'undefined') {
+                res.render('postar.ejs', {usersname : req.user.name, game:game});
+            }
+            else {
+                res.render('postar.ejs', {usersname : null, game:game});
+            }   
         }
-        else {
-            res.render('postar.ejs', {usersname : null, message: 'Thumbnail do jogo nao encontrada, confira o nome do jogo inserido e tente novamente.'});
-        }   
-    } else {
-        if(typeof req.user !== 'undefined') {
-            res.render('postar.ejs', {usersname : req.user.name});
-        }
-        else {
-            res.render('postar.ejs', {usersname : null});
-        }   
+    }
+    if(req.query.game == undefined || req.query.game == '') {
+        resto('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Blank_square.svg/2048px-Blank_square.svg.png');
+    }
+    else {
+        console.log('https://www.pcgamingwiki.com/w/index.php?search=' + req.query.game)
+        scrapeThis('https://www.pcgamingwiki.com/w/index.php?search=' + req.query.game, resto)
     }
 })
 app.post('/posts', async (req, res) => {

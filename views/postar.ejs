@@ -100,17 +100,21 @@
                           <input type="text" name="title" class="form-control form-control-lg" placeholder="Nome do savegame"/>
                         </div>
                         <div class="form-outline form-white mb-4">
-                            <label class="form-label" for="desc">Descrição</label>
-                            <input type="text" name="desc" class="form-control form-control-lg" placeholder="Breve descrição do save"/>
-                          </div>
+                            <span class="input-group-text">Breve descrição do save</span>
+                            <textarea class="form-control" aria-label="Descrição" name="desc"></textarea>
+                        </div>
                         <div class="form-outline form-white mb-4">
                           <label class="form-label" for="url">URL onde o save está</label>
                           <input type="text" name="url" class="form-control form-control-lg" placeholder="Endereço de onde está o save"/>
                         </div>    
                         <div class="form-outline form-white mb-4">
                             <label class="form-label" for="game">Nome do jogo</label>
-                            <input type="text" name="game" class="form-control form-control-lg" placeholder="Nome do jogo para o qual é o save"/>
-                          </div>    
+                            <input type="text" name="game" id="game" class="form-control form-control-lg" placeholder="Nome do jogo para o qual é o save"/>
+                            <div class="img-container">
+                                <img id="gamePreview" class="card-img-top" src="<%= game %>">
+                                <a id="gamePreview" class="btn btn-outline-dark btn-sm px-5" href="javascript:gamePreview()">Pré-visualizar imagem do jogo</a>
+                            </div>
+                        </div>    
                         <button class="btn btn-outline-dark btn-lg px-5" type="submit">Enviar</button>
                       </div>
                     </div>
@@ -124,15 +128,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+        urlParams = new URLSearchParams(window.location.search);
         if($("#navbarDropdown").width() < 160) {
             $("#navbarDropdown").css({'width': '160px'});
-        }        
+        }
         if($("#loginbtn").html().indexOf("esta") >= 0) {
             $("#loginbtn").addClass('disabled')
         } else {
             $("#logoutbtn").hide();
+            $(".logged").addClass('disabled');
         }
-
+        if($('#savesP').html().indexOf('hideme') >= 0) {
+            $('#savesP').hide();
+        }
+        function gamePreview() {
+            //window.location.replace('postar?game=' + $('#game').val());
+            window.open('<%= game %>', '_blank').focus();
+        }
+        if(urlParams.get('game') != null) {
+            
+        }
+        
     </script>
 </body>
 </html>

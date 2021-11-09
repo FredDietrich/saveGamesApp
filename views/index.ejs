@@ -121,7 +121,6 @@
                 </div>
                 <% } %>
                 <!--ate aqui-->
-                <h1><%= user.name %></h1>
             </div>
         </div>
         <nav aria-label="indexPages" class="position-static bottom-0 start-75">
@@ -187,69 +186,70 @@
         for(i=1;i < pages + 1; i++) {
             pagesArr.push(i);
         }
-        if(urlParams.get('limit') === null) {
-            for(i in pagesArr) {
-                console.log(typeof i)
-                if((urlParams.get('page') === null || urlParams.get('page') === '1') && i === '0') {
-                    $('#pages').append('<li class="page-item disabled" id="prev"><a class="page-link" href="#">Anterior</a></li>')
-                } else {
-                    if(i === '0') {
-                        $('#pages').append('<li class="page-item" id="prev"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) - 1) +'">Anterior</a></li>')
+        if(length.length > 0) {
+            if(urlParams.get('limit') === null) {
+                for(i in pagesArr) {
+                    console.log(typeof i)
+                    if((urlParams.get('page') === null || urlParams.get('page') === '1') && i === '0') {
+                        $('#pages').append('<li class="page-item disabled" id="prev"><a class="page-link" href="#">Anterior</a></li>')
+                    } else {
+                        if(i === '0') {
+                            $('#pages').append('<li class="page-item" id="prev"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) - 1) +'">Anterior</a></li>')
+                        }
                     }
+                    $('#pages').append('<li class="page-item" id="pageBtn'+pagesArr[i]+'"><a class="page-link" href="/?page='+pagesArr[i]+'">'+pagesArr[i]+'</a>');
                 }
-                $('#pages').append('<li class="page-item" id="pageBtn'+pagesArr[i]+'"><a class="page-link" href="/?page='+pagesArr[i]+'">'+pagesArr[i]+'</a>');
+            } else {
+                for(i in pagesArr) {
+                    if((urlParams.get('page') === null || urlParams.get('page') === '1') && i === '0') {
+                        $('#pages').append('<li class="page-item disabled" id="prev"><a class="page-link" href="#">Anterior</a></li>')
+                    } else {
+                        if(i === '0') {
+                            $('#pages').append('<li class="page-item" id="prev"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) - 1) +'&limit='+parseInt(urlParams.get('limit'))+'">Anterior</a></li>');
+                        }
+                    }
+                    $('#pages').append('<li class="page-item" id="pageBtn'+pagesArr[i]+'"><a class="page-link" href="/?page='+pagesArr[i]+'&limit='+parseInt(urlParams.get('limit'))+'">'+pagesArr[i]+'</a>');
+                } 
             }
-        } else {
-            for(i in pagesArr) {
-                if((urlParams.get('page') === null || urlParams.get('page') === '1') && i === '0') {
-                    $('#pages').append('<li class="page-item disabled" id="prev"><a class="page-link" href="#">Anterior</a></li>')
-                } else {
-                    if(i === '0') {
-                        $('#pages').append('<li class="page-item" id="prev"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) - 1) +'&limit='+parseInt(urlParams.get('limit'))+'">Anterior</a></li>');
-                    }
-                }
-                $('#pages').append('<li class="page-item" id="pageBtn'+pagesArr[i]+'"><a class="page-link" href="/?page='+pagesArr[i]+'&limit='+parseInt(urlParams.get('limit'))+'">'+pagesArr[i]+'</a>');
-            } 
-        }
-        $('.page-link').click(() => {
+            $('.page-link').click(() => {
+                console.log($('.page-link').children())
+            })
             console.log($('.page-link').children())
-        })
-        console.log($('.page-link').children())
-        if(urlParams.get('limit') === null) {
-            if(urlParams.get('page') != pagesArr[pagesArr.length - 1]) {
-                $('#pages').append('<li class="page-item"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) + 1) +'">Proxima</a></li>');
+            if(urlParams.get('limit') === null) {
+                if(urlParams.get('page') != pagesArr[pagesArr.length - 1]) {
+                    $('#pages').append('<li class="page-item"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) + 1) +'">Proxima</a></li>');
+                } else {
+                    $('#pages').append('<li class="page-item disabled"><a class="page-link" href="#">Proxima</a></li>');
+                }
             } else {
-                $('#pages').append('<li class="page-item disabled"><a class="page-link" href="#">Proxima</a></li>');
+                if(urlParams.get('page') != pagesArr[pagesArr.length - 1]) {
+                    $('#pages').append('<li class="page-item"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) + 1) +'&limit='+ urlParams.get('limit') +'">Proxima</a></li>');
+                } else {
+                    $('#pages').append('<li class="page-item disabled"><a class="page-link" href="#">Proxima</a></li>');
+                }
             }
-        } else {
-            if(urlParams.get('page') != pagesArr[pagesArr.length - 1]) {
-                $('#pages').append('<li class="page-item"><a class="page-link" href="/?page='+ (parseInt(urlParams.get('page')) + 1) +'&limit='+ urlParams.get('limit') +'">Proxima</a></li>');
-            } else {
-                $('#pages').append('<li class="page-item disabled"><a class="page-link" href="#">Proxima</a></li>');
-            }
-        }
-        $('#pages2').append('<br><li><div class="input-group flex-nowrap"><span class="input-group-text" id="addon-wrapping">Itens por pagina</span><input type="text" class="form-control" placeholder="Itens por pagina" aria-describedby="addon-wrapping" value="15" id="valLimit"><a class="btn btn-secondary" id="limit">Mudar itens por pagina</a></div></li>')
+            $('#pages2').append('<br><li><div class="input-group flex-nowrap"><span class="input-group-text" id="addon-wrapping">Itens por pagina</span><input type="text" class="form-control" placeholder="Itens por pagina" aria-describedby="addon-wrapping" value="15" id="valLimit"><a class="btn btn-secondary" id="limit">Mudar itens por pagina</a></div></li>')
 
-        $('#limit').click(() => {
-            if(urlParams.get('page') === null) {
-                $('#limit').attr('href', '/?limit=' + $('#valLimit').val())
-            } else {
-                $('#limit').attr('href', '/?page=' + urlParams.get('page') + '&limit=' + $('#valLimit').val());
-            }
+            $('#limit').click(() => {
+                if(urlParams.get('page') === null) {
+                    $('#limit').attr('href', '/?limit=' + $('#valLimit').val())
+                } else {
+                    $('#limit').attr('href', '/?page=' + urlParams.get('page') + '&limit=' + $('#valLimit').val());
+                }
 
-        })
-        if(urlParams.get('limit') !== null) {
-            $('#valLimit').val(urlParams.get('limit'));
+            })
+            if(urlParams.get('limit') !== null) {
+                $('#valLimit').val(urlParams.get('limit'));
+            }
+            if(urlParams.get('page') === null || urlParams.get('page') === '1') {
+                $('#pageBtn1').addClass('active');
+                $('#prev').addClass('disabled');
+            }
+            else {
+                $('#pageBtn' + urlParams.get('page')).addClass('active');
+                $('#prev').removeClass('disabled');
+            }
         }
-        if(urlParams.get('page') === null || urlParams.get('page') === '1') {
-            $('#pageBtn1').addClass('active');
-            $('#prev').addClass('disabled');
-        }
-        else {
-            $('#pageBtn' + urlParams.get('page')).addClass('active');
-            $('#prev').removeClass('disabled');
-        }
-        
         respond();
         $(window).resize(respond);
         });

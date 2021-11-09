@@ -1,7 +1,10 @@
 const localStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
 const MongoClient = require('mongodb');
-var url = "mongodb+srv://dietrich-admin:JGNhFdgEnJdJA6fm@savescluster.p8ha1.mongodb.net/savesCluster?retryWrites=true&w=majority";
+if(process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+var url = process.env.MONGO_URL;
 //const mongoClient = new MongoClient.MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 function initialize(passport) {
     const authenticateUser = async (username, password, done) => {
@@ -25,7 +28,6 @@ function initialize(passport) {
         }
         try {
             if(await bcrypt.compare(password, user.password)) {
-                console.log(user)
                 return done(null, user)
             } else {
                 return done(null, false, {message: 'Verifique a senha ou username'})

@@ -18,7 +18,6 @@ exports.sendSave = (obj) => {
         let savesDB = db.db("savesDB");
         savesDB.collection("saves").insertOne(obj, (err, res) => {
             if(err) throw err;
-            console.log("save inserted");
             db.close();
         });
     });
@@ -84,7 +83,6 @@ exports.getSaves = (range, req, res) => {
                                 for(i=1;i < length + 1; i++) {
                                     lengthArr.push(i);
                                 }
-                                console.log('1')
                                 res.render('index.ejs', {user: req.user, data : result, hasSaves: true, length:lengthArr});
                             })
                         } else {
@@ -93,7 +91,6 @@ exports.getSaves = (range, req, res) => {
                                 for(i=1;i < length + 1; i++) {
                                     lengthArr.push(i);
                                 }
-                                console.log(req.user.name)
                                 res.render('index.ejs', {user: req.user, data : result, hasSaves: false, length:lengthArr});
                             })
                         }
